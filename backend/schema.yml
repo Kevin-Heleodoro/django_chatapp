@@ -1,0 +1,7 @@
+openapi: 3.0.3
+info:
+  title: DJ Chat API
+  version: 1.0.0
+  description: API for the DJ Chat application
+paths: {}
+components: {}

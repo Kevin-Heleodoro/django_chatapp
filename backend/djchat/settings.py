@@ -23,8 +23,11 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    # Internal
     "account",
     "server",
+    # External
+    "drf_spectacular",
 ]
 
 MIDDLEWARE = [
@@ -112,3 +115,13 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # Defining our own user model to have control over fields and methods
 AUTH_USER_MODEL = "account.Account"
+
+# DRF-Spectacular settings
+REST_FRAMEWORK = {"DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema"}
+
+SPECTACULAR_SETTINGS = {
+    "TITLE": "DJ Chat API",
+    "DESCRIPTION": "API for the DJ Chat application",
+    "VERSION": "1.0.0",
+    "SERVCE_INCLUDE_SCHEMA": True,
+}
