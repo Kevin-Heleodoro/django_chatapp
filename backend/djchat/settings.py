@@ -28,6 +28,7 @@ INSTALLED_APPS = [
     "server",
     # External
     "drf_spectacular",
+    "rest_framework",
 ]
 
 MIDDLEWARE = [
@@ -117,7 +118,10 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 AUTH_USER_MODEL = "account.Account"
 
 # DRF-Spectacular settings
-REST_FRAMEWORK = {"DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema"}
+REST_FRAMEWORK = {
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
+    "DEFAULT_AUTHENTICATION_CLASSES": ["rest_framework.authentication.SessionAuthentication"],
+}
 
 SPECTACULAR_SETTINGS = {
     "TITLE": "DJ Chat API",
