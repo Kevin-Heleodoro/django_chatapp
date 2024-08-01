@@ -4,6 +4,14 @@ from django.dispatch import receiver
 from django.shortcuts import get_object_or_404
 
 
+def channel_icon_upload_path(instance, filename):
+    return f"server/{instance.id}/server_icon/{filename}"
+
+
+def channel_banner_upload_path(instance, filename):
+    return f"server/{instance.id}/server_banner/{filename}"
+
+
 def category_icon_upload_path(instance, filename):
     return f"category/{instance.id}/category_icon/{filename}"
 
@@ -55,18 +63,36 @@ class Server(models.Model):
 
 class Channel(models.Model):
     name = models.CharField(max_length=100)
-    owner = models.ForeignKey(
-        settings.AUTH_USER_MODEL,
-        on_delete=models.CASCADE,
-        related_name="channel_owner",
-    )
+    owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="channel_owner")
     topic = models.CharField(max_length=100)
     server = models.ForeignKey(Server, on_delete=models.CASCADE, related_name="channel_server")
+    banner = models.ImageField(upload_to=channel_banner_upload_path, null=True, blank=True)
+    icon = models.ImageField(upload_to=channel_icon_upload_path, null=True, blank=True)
 
     def save(self, *args, **kwargs):
-        # enforce name is lowercase
+        if self.id:
+            existing = get_object_or_404(Channel, id=self.id)
+            if existing.icon != self.icon:
+                existing.icon.delete(save=False)
+            if existing.banner != self.banner:
+                existing.banner.delete(save=False)
+
         self.name = self.name.lower()
         super(Channel, self).save(*args, **kwargs)
+
+    # Django signals
+    @receiver(models.signals.pre_delete, sender="server.Channel")
+    def category_delete_files(sender, instance, **kwargs):
+        for field in instance._meta.fields:
+            if field.name == "icon" or field.name == "banner":
+                file = getattr(instance, field.name)
+                if file:
+                    file.delete(save=False)
+
+    # def save(self, *args, **kwargs):
+    #     # enforce name is lowercase
+    #     self.name = self.name.lower()
+    #     super(Channel, self).save(*args, **kwargs)
 
     def __str__(self):
         return self.name
