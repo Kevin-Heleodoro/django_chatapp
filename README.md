@@ -15,3 +15,10 @@ http://localhost:8000/api/server/select/?by_serverid=2
 
 Need to look at the possible combinations in the ServerListViewSet.list method for which parameters should not work together
 
+http://localhost:5173/
+
+To run:
+
+backend: `./manage.py runserver`
+
+frontend: `npm run dev`
