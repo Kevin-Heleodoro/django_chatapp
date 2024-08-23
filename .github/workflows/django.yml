@@ -1,4 +1,4 @@
-name: Django CI
+name: djChat CI
 
 on:
   push:
@@ -7,7 +7,7 @@ on:
     branches: [ "main" ]
 
 jobs:
-  build:
+  build-backend:
 
     runs-on: ubuntu-latest
     strategy:
@@ -17,14 +17,39 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
+
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v3
       with:
         python-version: ${{ matrix.python-version }}
+    
     - name: Install Dependencies
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt
+    
     - name: Run Tests
       run: |
         python ./backend/manage.py test
+
+  build-frontend:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+      
+      - name: Install Dependencies
+        run: |
+          cd frontend
+          npm install
+      
+      - name: Build Frontend
+        run: |
+          cd frontend
+          npm run build
+  
