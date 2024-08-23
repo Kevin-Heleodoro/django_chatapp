@@ -1,8 +1,20 @@
 import { Box, Typography } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
+import axios from "axios";
 
 const SecondaryDrawer = () => {
   const theme = useTheme();
+
+  const URL = "http://127.0.0.1:8000/api/server/select/?category=Wellness";
+  axios
+    .get(URL)
+    .then((res) => {
+      console.log(res.data);
+    })
+    .catch((err) => {
+      console.error(err);
+    });
+
   return (
     <Box
       sx={{
