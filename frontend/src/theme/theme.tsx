@@ -12,6 +12,9 @@ declare module "@mui/material/styles" {
       width: number;
       closed: number;
     };
+    secondaryDrawer: {
+      width: number;
+    };
   }
 
   // Allows us to use primaryAppBar as a global setting
@@ -22,6 +25,9 @@ declare module "@mui/material/styles" {
     primaryDrawer: {
       width?: number;
       closed?: number;
+    };
+    secondaryDrawer: {
+      width?: number;
     };
   }
 }
@@ -37,6 +43,9 @@ export const createMuiTheme = () => {
     primaryDrawer: {
       width: 240,
       closed: 70,
+    },
+    secondaryDrawer: {
+      width: 240,
     },
     components: {
       MuiAppBar: {
